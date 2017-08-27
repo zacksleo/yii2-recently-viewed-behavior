@@ -26,10 +26,10 @@ class RecentlyViewedBehavior extends Behavior
         // Create the session index
         $index = $modelClass . '_recently_viewed';
         // Check if the session index exists
-        if (!isset(Yii::$app->session[$index])) {
+        if (!(Yii::$app->session->has($index))) {
             $recentlyViewed = [];
         }
-        $recentlyViewed = Yii::$app->session[$index];
+        $recentlyViewed = Yii::$app->session->get($index, []);
         // Remove the id if it is already in the list
         if (($key = array_search($id, $recentlyViewed)) !== false) {
             unset($recentlyViewed[$key]);
@@ -42,9 +42,7 @@ class RecentlyViewedBehavior extends Behavior
         // Add the current item id to the end of the array
         array_push($recentlyViewed, $id);
         // Update the session
-        if (Yii instanceof yii\web\Application) {
-            Yii::$app->getSession()->set($index, $recentlyViewed);
-        }
+        Yii::$app->session->set($index, $recentlyViewed);
     }
 
     /**
