@@ -4,7 +4,6 @@ namespace zacksleo\yii2\behaviors;
 
 use yii;
 use yii\base\Behavior;
-use zacksleo\yii2\cms\models\Item;
 
 /**
  * ERecentlyViewedBehavior is a behavior for managing recently viewed model items.
@@ -55,7 +54,6 @@ class RecentlyViewedBehavior extends Behavior
     public function getRecentlyViewed($modelClass)
     {
         // Create the session index
-        /* @var $modelClass Item */
         $index = $modelClass . '_recently_viewed';
         $models = array();
         // Check if the session index exists
@@ -74,10 +72,7 @@ class RecentlyViewedBehavior extends Behavior
             $commaSeparated = implode(',', $recentlyViewed);
             // Find all of the models with the array of ids recently viewed
             // and order the results in the same order as the array
-            //$criteria = new CDbCriteria;
-            //$criteria->order = "FIELD(id, $recentlyViewedCommaSeparated)"; // MySQL function
-            //$models = CActiveRecord::model($modelClass)->findAllByPk($recentlyViewed, $criteria);
-            $models = $modelClass::find()->orderBy([new yii\db\Expression("FIELD (id, $commaSeparated)")])->all();
+            $models = $modelClass::find()->where(['id' => $recentlyViewed])->orderBy([new yii\db\Expression("FIELD (id, $commaSeparated)")])->all();
         }
         return $models;
     }

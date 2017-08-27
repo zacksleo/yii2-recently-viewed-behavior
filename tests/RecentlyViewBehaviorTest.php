@@ -17,7 +17,6 @@ class RecentlyViewBehaviorTest extends TestCase
         $behavior->setRecentlyViewed(get_class($model), $model->id);
         $models = $behavior->getRecentlyViewed(get_class($model));
         $this->assertInstanceOf('tests\data\models\Item', $models[0]);
-        var_dump($models);
         $this->assertEquals(1, count($models));
     }
 }
