@@ -44,6 +44,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
                 'db' => [
                     'class' => 'yii\db\Connection',
                     'dsn' => 'mysql:host=localhost;dbname=test',
+                    'username'=> 'root',
                 ],
                 'request' => [
                     'hostInfo' => 'http://domain.com',
