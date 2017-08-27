@@ -3,6 +3,7 @@
 namespace tests;
 
 use Yii;
+use yii\db\Exception;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 
@@ -44,7 +45,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
                 'db' => [
                     'class' => 'yii\db\Connection',
                     'dsn' => 'mysql:host=localhost;dbname=test',
-                    'username'=> 'root',
+                    'username' => 'root',
                 ],
                 'request' => [
                     'hostInfo' => 'http://domain.com',
@@ -85,66 +86,70 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $db = Yii::$app->getDb();
 
         // Structure :
-        $db->createCommand()->createTable('item', [
-            'id' => 'pk',
-            'item_name' => 'string(125) not null',
-            'subtitle' => 'string(125) not null',
-            'categories' => 'string not null',
-            'market_price' => 'decimal(10,2) not null default 0',
-            'price' => 'integer not null default 0',
-            'description' => 'text not null',
-            'logo_image' => 'string not null',
-            'status' => 'boolean not null default 1',
-            'created_at' => 'integer not null',
-            'updated_at' => 'integer not null',
-        ])->execute();
-        $db->createCommand()->createTable('session', [
-            'id' => 'pk',
-            'expire' => 'integer',
-            'data' => 'binary',
-        ])->execute();
-        // Data :
-        $db->createCommand()->batchInsert('item', [
-            'id',
-            'item_name',
-            'subtitle',
-            'categories',
-            'description',
-            'logo_image',
-            'created_at',
-            'updated_at'
-        ], [
-            [
-                'id' => 1,
-                'item_name' => 'goods-1',
-                'subtitle' => 'goods',
-                'categories' => '1,2,3',
-                'description' => 'goods',
-                'logo_image' => 'logo.png',
-                'created_at' => time(),
-                'updated_at' => time(),
-            ],
-            [
-                'id' => 2,
-                'item_name' => 'goods-2',
-                'subtitle' => 'goods',
-                'categories' => '1,2,3',
-                'description' => 'goods',
-                'logo_image' => 'logo.png',
-                'created_at' => time(),
-                'updated_at' => time(),
-            ],
-            [
-                'id' => 3,
-                'item_name' => 'goods-3',
-                'subtitle' => 'goods',
-                'categories' => '1,2,3',
-                'description' => 'goods',
-                'logo_image' => 'logo.png',
-                'created_at' => time(),
-                'updated_at' => time(),
-            ],
-        ])->execute();
+        try {
+            $db->createCommand()->createTable('item', [
+                'id' => 'pk',
+                'item_name' => 'string(125) not null',
+                'subtitle' => 'string(125) not null',
+                'categories' => 'string not null',
+                'market_price' => 'decimal(10,2) not null default 0',
+                'price' => 'integer not null default 0',
+                'description' => 'text not null',
+                'logo_image' => 'string not null',
+                'status' => 'boolean not null default 1',
+                'created_at' => 'integer not null',
+                'updated_at' => 'integer not null',
+            ])->execute();
+            $db->createCommand()->createTable('session', [
+                'id' => 'pk',
+                'expire' => 'integer',
+                'data' => 'binary',
+            ])->execute();
+            // Data :
+            $db->createCommand()->batchInsert('item', [
+                'id',
+                'item_name',
+                'subtitle',
+                'categories',
+                'description',
+                'logo_image',
+                'created_at',
+                'updated_at'
+            ], [
+                [
+                    'id' => 1,
+                    'item_name' => 'goods-1',
+                    'subtitle' => 'goods',
+                    'categories' => '1,2,3',
+                    'description' => 'goods',
+                    'logo_image' => 'logo.png',
+                    'created_at' => time(),
+                    'updated_at' => time(),
+                ],
+                [
+                    'id' => 2,
+                    'item_name' => 'goods-2',
+                    'subtitle' => 'goods',
+                    'categories' => '1,2,3',
+                    'description' => 'goods',
+                    'logo_image' => 'logo.png',
+                    'created_at' => time(),
+                    'updated_at' => time(),
+                ],
+                [
+                    'id' => 3,
+                    'item_name' => 'goods-3',
+                    'subtitle' => 'goods',
+                    'categories' => '1,2,3',
+                    'description' => 'goods',
+                    'logo_image' => 'logo.png',
+                    'created_at' => time(),
+                    'updated_at' => time(),
+                ],
+            ])->execute();
+        } catch (Exception $e) {
+
+        }
     }
 
     /**
