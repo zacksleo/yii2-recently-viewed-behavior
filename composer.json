@@ -1,0 +1,27 @@
+{
+  "name": "zacksleo/yii2-recently-viewed-behavior",
+  "description": "yii2 recently viewed behavior",
+  "type": "yii2-extension",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "zacksleo",
+      "email": "zacksleo@gmail.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "zacksleo\\yii2\\behaviors\\": "src"
+    }
+  },
+  "asset-packagist": {
+    "type": "composer",
+    "url": "https://asset-packagist.org"
+  }
+}
