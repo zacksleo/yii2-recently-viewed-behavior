@@ -15,7 +15,9 @@ class DictionaryTest extends TestCase
      * @var $dictionary Dictionary
      */
     protected $dictionary;
-    protected $item1, $item2, $item3;
+    protected $item1;
+    protected $item2;
+    protected $item3;
 
     public function setUp()
     {

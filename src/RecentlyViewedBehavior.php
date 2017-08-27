@@ -75,13 +75,13 @@ class RecentlyViewedBehavior extends Behavior
             // Reverse the array so the most recently added item is first
             $recentlyViewed = array_reverse($recentlyViewed);
             // Create a comma separated list for the db order property
-            $recentlyViewedCommaSeparated = implode(',', $recentlyViewed);
+            $commaSeparated = implode(',', $recentlyViewed);
             // Find all of the models with the array of ids recently viewed
             // and order the results in the same order as the array
             //$criteria = new CDbCriteria;
             //$criteria->order = "FIELD(id, $recentlyViewedCommaSeparated)"; // MySQL function
             //$models = CActiveRecord::model($modelClass)->findAllByPk($recentlyViewed, $criteria);
-            $models = $modelClass::find()->orderBy("FIELD(id, $recentlyViewedCommaSeparated)")->all();
+            $models = $modelClass::find()->orderBy("FIELD(id, $commaSeparated)")->all();
         }
         return $models;
     }

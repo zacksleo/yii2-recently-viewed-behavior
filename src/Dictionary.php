@@ -8,6 +8,7 @@
 
 namespace zacksleo\yii2\behaviors;
 
+use yii\base\Object;
 use yii\helpers\ArrayHelper;
 
 /**
