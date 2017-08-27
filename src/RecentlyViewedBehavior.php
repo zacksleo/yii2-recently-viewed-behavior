@@ -43,7 +43,9 @@ class RecentlyViewedBehavior extends Behavior
         // Add the current item id to the end of the array
         array_push($recentlyViewed, $id);
         // Update the session
-        Yii::$app->getSession()->set($index, $recentlyViewed);
+        if (Yii instanceof yii\web\Application) {
+            Yii::$app->getSession()->set($index, $recentlyViewed);
+        }
     }
 
     /**
