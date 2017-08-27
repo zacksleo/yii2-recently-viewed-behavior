@@ -148,7 +148,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
                 ],
             ])->execute();
         } catch (Exception $e) {
-
         }
     }
 
