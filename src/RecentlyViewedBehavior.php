@@ -4,6 +4,7 @@ namespace zacksleo\yii2\behaviors;
 
 use yii;
 use yii\base\Behavior;
+use zacksleo\yii2\cms\models\Item;
 
 /**
  * ERecentlyViewedBehavior is a behavior for managing recently viewed model items.
@@ -25,28 +26,25 @@ class RecentlyViewedBehavior extends Behavior
     {
         // Create the session index
         $index = $modelClass . '_recently_viewed';
-
         // Check if the session index exists
         if (!isset(Yii::$app->session[$index])) {
-            $recentlyViewed = new  Dictionary();
+            $recentlyViewed = [];
         } else {
             $recentlyViewed = Yii::$app->session[$index];
             // Remove the id if it is already in the list
-            if ($recentlyViewed->contains($id)) {
-                $recentlyViewed->remove($id);
+            if (($key = array_search($id, $recentlyViewed)) !== false) {
+                unset($recentlyViewed[$key]);
             }
             // If a limit is set, and the list is at (or over) the limit, remove oldest item(s)
-            if ($this->limit > 0 && $recentlyViewed->count() >= $this->limit) {
-                $count = $recentlyViewed->count() - $this->limit;
-                for ($i = 0; $i <= $count; $i++) {
-                    $recentlyViewed->removeAt(0);
-                }
+            if ($this->limit > 0 && count($recentlyViewed) >= $this->limit) {
+                $count = count($recentlyViewed) - $this->limit;
+                $recentlyViewed = array_slice($recentlyViewed, $count);
             }
         }
         // Add the current item id to the end of the array
-        $recentlyViewed->add($id);
+        array_push($recentlyViewed, $id);
         // Update the session
-        Yii::$app->session[$index] = $recentlyViewed;
+        Yii::$app->getSession()->set($index, $recentlyViewed);
     }
 
     /**
@@ -57,21 +55,19 @@ class RecentlyViewedBehavior extends Behavior
     public function getRecentlyViewed($modelClass)
     {
         // Create the session index
+        /* @var $modelClass Item */
         $index = $modelClass . '_recently_viewed';
         $models = array();
         // Check if the session index exists
         if (isset(Yii::$app->session[$index])) {
+            /* @var $recentlyViewed \zacksleo\yii2\behaviors\Dictionary */
             $recentlyViewed = Yii::$app->session[$index];
             // Check if a limit is set, and if the list is at (or over) the limit
-            if ($this->limit > 0 && $recentlyViewed->count() >= $this->limit) {
-                $count = $recentlyViewed->count() - $this->limit;
+            if ($this->limit > 0 && count($recentlyViewed) >= $this->limit) {
+                $count = count($recentlyViewed) - $this->limit;
                 // Remove the oldest item(s) (always an index of 0 after each removal)
-                for ($i = 0; $i < $count; $i++) {
-                    $recentlyViewed->removeAt(0);
-                }
+                $recentlyViewed = array_slice($recentlyViewed, $count);
             }
-            // Convert the CList object stored in the session to an array
-            $recentlyViewed = $recentlyViewed->toArray();
             // Reverse the array so the most recently added item is first
             $recentlyViewed = array_reverse($recentlyViewed);
             // Create a comma separated list for the db order property
@@ -81,7 +77,7 @@ class RecentlyViewedBehavior extends Behavior
             //$criteria = new CDbCriteria;
             //$criteria->order = "FIELD(id, $recentlyViewedCommaSeparated)"; // MySQL function
             //$models = CActiveRecord::model($modelClass)->findAllByPk($recentlyViewed, $criteria);
-            $models = $modelClass::find()->orderBy("FIELD(id, $commaSeparated)")->all();
+            $models = $modelClass::find()->orderBy([new yii\db\Expression("FIELD (id, $commaSeparated)")])->all();
         }
         return $models;
     }

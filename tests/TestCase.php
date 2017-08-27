@@ -43,11 +43,18 @@ class TestCase extends \PHPUnit\Framework\TestCase
             'components' => [
                 'db' => [
                     'class' => 'yii\db\Connection',
-                    'dsn' => 'sqlite::memory:',
+                    'dsn' => 'mysql:host=localhost;dbname=test',
                 ],
                 'request' => [
                     'hostInfo' => 'http://domain.com',
                     'scriptUrl' => 'index.php',
+                ],
+                'session' => [
+                    'class' => 'yii\web\DbSession',
+                    'cookieParams' => [
+                        'domain' => '.domain.com',
+                        'httpOnly' => false,
+                    ],
                 ],
             ],
         ], $config));
@@ -90,7 +97,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
             'created_at' => 'integer not null',
             'updated_at' => 'integer not null',
         ])->execute();
-
+        $db->createCommand()->createTable('session', [
+            'id' => 'pk',
+            'expire' => 'integer',
+            'data' => 'binary',
+        ])->execute();
         // Data :
         $db->createCommand()->batchInsert('item', [
             'id',
