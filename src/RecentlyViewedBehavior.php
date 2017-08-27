@@ -28,17 +28,16 @@ class RecentlyViewedBehavior extends Behavior
         // Check if the session index exists
         if (!isset(Yii::$app->session[$index])) {
             $recentlyViewed = [];
-        } else {
-            $recentlyViewed = Yii::$app->session[$index];
-            // Remove the id if it is already in the list
-            if (($key = array_search($id, $recentlyViewed)) !== false) {
-                unset($recentlyViewed[$key]);
-            }
-            // If a limit is set, and the list is at (or over) the limit, remove oldest item(s)
-            if ($this->limit > 0 && count($recentlyViewed) >= $this->limit) {
-                $count = count($recentlyViewed) - $this->limit;
-                $recentlyViewed = array_slice($recentlyViewed, $count);
-            }
+        }
+        $recentlyViewed = Yii::$app->session[$index];
+        // Remove the id if it is already in the list
+        if (($key = array_search($id, $recentlyViewed)) !== false) {
+            unset($recentlyViewed[$key]);
+        }
+        // If a limit is set, and the list is at (or over) the limit, remove oldest item(s)
+        if ($this->limit > 0 && count($recentlyViewed) >= $this->limit) {
+            $count = count($recentlyViewed) - $this->limit;
+            $recentlyViewed = array_slice($recentlyViewed, $count);
         }
         // Add the current item id to the end of the array
         array_push($recentlyViewed, $id);
