@@ -15,8 +15,13 @@ class RecentlyViewBehaviorTest extends TestCase
         $behavior = new RecentlyViewedBehavior();
         $behavior->limit = 5;
         $behavior->setRecentlyViewed(get_class($model), $model->id);
+        $behavior->setRecentlyViewed(get_class($model), $model->id);
         $models = $behavior->getRecentlyViewed(get_class($model));
         $this->assertInstanceOf('tests\data\models\Item', $models[0]);
         $this->assertEquals(1, count($models));
+        $json = $behavior->clearRecentlyViewed(get_class($model));
+        $this->assertSame('{"success":true}', $json);
+        $empty = $behavior->getRecentlyViewed(get_class($model));
+        $this->assertEmpty($empty);
     }
 }
