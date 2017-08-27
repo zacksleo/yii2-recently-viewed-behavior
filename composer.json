@@ -9,6 +9,7 @@
       "email": "zacksleo@gmail.com"
     }
   ],
+  "minimum-stability": "stable",
   "require": {
     "yiisoft/yii2": "*"
   },
@@ -20,8 +21,10 @@
       "zacksleo\\yii2\\behaviors\\": "src"
     }
   },
-  "asset-packagist": {
-    "type": "composer",
-    "url": "https://asset-packagist.org"
-  }
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ]
 }
